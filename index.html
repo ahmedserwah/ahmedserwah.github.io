@@ -1,191 +1,107 @@
-<<!DOCTYPE HTML>
-
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>ahmed serwah</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<head>
+    <title>Exam Form (Focus Tracking & Auto-Submit)</title>
+    <script>
+        let maxCheatAttempts = 3;  
+        let warningThreshold = 2;  
+        let examDuration = 1 * 20; // 10 minutes (change as needed)
+        let currentExam = "exam20";  
 
-		<!-- Wrapper -->
-			<div id="wrapper" class="fade-in">
+        // Reset block status if this is a new exam
+        if (localStorage.getItem("examId") !== currentExam) {
+            localStorage.removeItem("cheatCount");
+            localStorage.removeItem("blocked");
+            sessionStorage.clear();
+            localStorage.setItem("examId", currentExam);
+        }
 
-				<!-- Intro -->
-					<div id="intro">
-						<h1>welcome to my my portfolio <br />
-						</h1>
-						<p>Senior BIS graduate with a major in statistics passionate about data-driven analytics to solve complex problems, 
-						innovate new services and products, optimize processes, and design human-centered experience. Highly skilled in Python, SQL, and data visualization tools. 
-						<ul class="actions">
-							<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
-						</ul>
-					</div>
+        let cheatCount = localStorage.getItem("cheatCount") ? parseInt(localStorage.getItem("cheatCount")) : 0;
+        let timeLeft = sessionStorage.getItem("timeLeft") ? parseInt(sessionStorage.getItem("timeLeft")) : examDuration;
 
-				<!-- Header -->
-					<header id="header">
-						<a href="index.html" class="logo">ahmed serwah</a>
-					
-					</header>
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("timer").innerText = `⏳ Time Left: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 
-				<!-- Nav -->
-					<nav id="nav">
-						<ul class="links">
-							<li class="active"><a href="index.html">projects</a></li>
-							
-							
-						</ul>
-						<ul class="icons">
-							<li><a href="https://www.linkedin.com/in/ahmedserwah/" class="icon brands alt fa-linkedin"><span class="label">linked in</span></a></li>
-							<li><a href="https://www.facebook.com/ahamedserwah/" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-							<li><a href="https://github.com/ahmedserwah?tab=repositories" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-						</ul>
-					</nav>
+            if (timeLeft <= 0) {
+                alert("⏳ Time is up! Submitting your test now...");
+                submitForm();
+            } else {
+                timeLeft--;
+                sessionStorage.setItem("timeLeft", timeLeft);
+                setTimeout(updateTimer, 1000);
+            }
+        }
 
-				<!-- Main -->
-					<div id="main">
+        function submitForm() {
+            let iframe = document.getElementById("examFrame").contentWindow.document;
 
-						<!-- Featured Post -->
-							<article class="post featured">
-								<header class="major">
-									
-									<h2><a href="https://github.com/ahmedserwah/analyze-A-B-test-/blob/main/Analyze_ab_test_results_notebook.ipynb"> A/B Test in PYTHON<br />
-									</a></h2>
-									<p>perfrom A/B TEST TO comparing two different versions of a web page or email so as to determine which version generates more conversions. <br />
-									<br />
-									.</p>
-								</header>
-								<a href="https://github.com/ahmedserwah/analyze-A-B-test-/blob/main/Analyze_ab_test_results_notebook.ipynb" class="image main"><img src="images/AB Testing.png" alt="" /></a>
-								<ul class="actions special">
-									<li><a href="https://github.com/ahmedserwah/analyze-A-B-test-/blob/main/Analyze_ab_test_results_notebook.ipynb" class="button large">view project</a></li>
-								</ul>
-							</article>
+            try {
+                let submitButton = iframe.querySelector('div[role="button"]:not([aria-disabled="true"])');
 
-						<!-- Posts -->
-							<section class="posts">
-								<article>
-									<header>
-								
-										<h2><a href="#">Google data analytics professional certificate</br />
-										</a></h2>
-									</header>
-									<a href="https://www.coursera.org/account/accomplishments/specialization/certificate/CEBPR7AZ6R4Q" class="image fit"><img src="images/google.PNG" alt="" /></a>
-									
-									<ul class="actions special">
-										<li><a href="https://www.coursera.org/account/accomplishments/specialization/certificate/CEBPR7AZ6R4Q" class="button">view certificate</a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										
-										<h2><a href="https://public.tableau.com/app/profile/ahmed.serwah/viz/COVID19DASHBOARD_16250129569290/Dashboard2">udacity data analysis nano degree<br />
-										</a></h2>
-									</header>
-									<a href="https://public.tableau.com/app/profile/ahmed.serwah/viz/COVID19DASHBOARD_16250129569290/Dashboard2" class="image fit"><img src="images/data analysis advanced.PNG"alt="" /></a>
-									<p></p>
-									<ul class="actions special">
-										<li><a href="https://public.tableau.com/app/profile/ahmed.serwah/viz/COVID19DASHBOARD_16250129569290/Dashboard2" class="button">view certificate </a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										
-										<h2><a href="https://github.com/ahmedserwah/no-show-appointments--nanodegree">  analyzing Prosper Loan Data  
-															
-											<br />
-											(financial data)
-										</a></h2>
-									</header>
-									<a href="https://github.com/ahmedserwah/Communicate-Data-Findings" class="image fit"><img src="images/Untitled-6-1600x750.jpg" alt="" /></a>
-									<p>The dataset consisted of borrower APRs and attributes of 113,937 loans. The attributes included original loan amount, borrower's Prosper rating, loan term, borrower's stated monthly income, as well as many other features such as borrower's employment status, debt to income ratio, current loan status etc.</p>
-									<ul class="actions special">
-										<li><a href="https://github.com/ahmedserwah/Communicate-Data-Findings" class="button">view project</a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										
-										<h2><a href="https://github.com/ahmedserwah/no-show-appointments--nanodegree">analyzing no-show appointments data 
-											 <br />
-											 (medical data)
-										</a></h2>
-									</header>
-									<a href="https://github.com/ahmedserwah/no-show-appointments--nanodegree" class="image fit"><img src="images/appointment-no-show-facts-and-statistics.jpg" alt="" /></a>
-									<p>.</p>his project is performed on 100k medical appointments in Brazil and is focused on the question of whether or not patients show up for their appointment. A number of characteristics about the patient are included in the data. The project tries to find out the factors that predicts if a patient will show up for their scheduled appointment
-									<ul class="actions special">
-										<li><a href="https://github.com/ahmedserwah/no-show-appointments--nanodegree" class="button">view project</a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										
-										<h2><a href="#"> tableau dashboard for Maven Analytics<br />
-										</a></h2>
-									</header>
-									<a href=https://public.tableau.com/app/profile/ahmed.serwah/viz/olympics_16264734638780/Dashboard1 class="image fit"><img src="images/2221.PNG" alt="" /></a>
-									<p> visualizing the olympics games for maven analytics challenge  </p>
-									<ul class="actions special">
-										<li><a href=https://public.tableau.com/app/profile/ahmed.serwah/viz/olympics_16264734638780/Dashboard1 class="button">view project</a></li>
-									</ul>
-								</article>
-								<article>
-									<header>
-										<h2><a href="https://github.com/ahmedserwah/sql-/blob/main/SQLQuery1.sql"> <br />
-										<h2><a href="https://www.coursera.org/account/accomplishments/specialization/certificate/CEBPR7AZ6R4Q">covid 19 data analysis in sql <br />
-										</a></h2>
-									</header>
-									<a href="https://github.com/ahmedserwah/sql-/blob/main/SQLQuery1.sql" class="image fit"><img src="images/explore.jpg" alt="" /></a>
-									<p>covid 19 data analysis in sql</p>
-									<ul class="actions special">
-										<li><a href="https://github.com/ahmedserwah/sql-/blob/main/SQLQuery1.sql" class="button">view project</a></li>
-									</ul>
-								</article>
-							</section>
+                if (submitButton) {
+                    submitButton.click();
+                    alert("✅ Your exam has been submitted successfully!");
+                } else {
+                    alert("⚠ Unable to auto-submit. Please submit manually.");
+                }
+            } catch (error) {
+                alert("⚠ Google Forms blocked auto-submit. Please submit manually.");
+            }
 
-						
+            sessionStorage.clear();
+        }
 
-					</div>
+        function logCheatingAttempt() {
+            cheatCount++;
+            localStorage.setItem("cheatCount", cheatCount);
 
-				<!-- Footer -->
-					<footer id="footer"text-align: center>
-						<section class="split contact">
-							
-							<section>
-								<h3>Phone</h3>
-								<p><a href="#">01119749649</a></p>
-							</section>
-							<section>
-								<h3>Email</h3>
-								<p><a href="gmail">ahmedserwah2018@gmail.com</a></p>
-							</section>
-							<section>
-								<h3>Social</h3>
-								<ul class="icons alt">
-									<li><a href="https://www.linkedin.com/in/ahmedserwah/" class="icon brands alt fa-linkedin"><span class="label">linked in</span></a></li>
-									<li><a href="https://www.facebook.com/ahamedserwah/" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="https://github.com/ahmedserwah?tab=repositories" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-								</ul>
-							</section>
-						</section>
-					</footer>
+            console.log("User left the exam! Attempt #" + cheatCount);
 
-				<!-- Copyright -->
-					<div id="copyright">
-						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
-					</div>
+            if (cheatCount === warningThreshold) {
+                alert("⚠ Warning: Switching tabs is not allowed! One more attempt will reset your test.");
+            }
 
-			</div>
+            if (cheatCount >= maxCheatAttempts) {
+                alert("🚨 You have switched tabs too many times! You are now blocked from retaking the test.");
+                blockAccess();
+            } else {
+                resetForm();
+            }
+        }
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+        function resetForm() {
+            sessionStorage.clear();
+            document.cookie = "";
+            window.location.reload();
+        }
 
-	</body>
+        function blockAccess() {
+            localStorage.setItem("blocked", "true");
+            document.body.innerHTML = "<h2 style='color:red; text-align:center;'>❌ You have been blocked from this exam due to multiple cheating attempts.</h2>";
+        }
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                logCheatingAttempt();
+            }
+        });
+
+        window.onload = function() {
+            if (localStorage.getItem("blocked") === "true") {
+                blockAccess();
+            } else {
+                updateTimer();
+            }
+        };
+    </script>
+</head>
+<body>
+    <h2>Exam Form (Focus Tracking & Auto-Submit)</h2>
+    <p id="timer"><strong>⏳ Time Left: Loading...</strong></p>
+    <p><strong>Warning:</strong> Switching tabs too many times will reset your test.</p>
+    
+    <iframe id="examFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSf7MH3MATd5UHbJScqQfjiTBdD3ef0P7KF__-O3GCmlN6kaDw/viewform?embedded=true" width="640" height="994" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+</body>
 </html>
